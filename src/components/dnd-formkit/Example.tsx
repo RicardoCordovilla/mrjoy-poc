@@ -1,9 +1,10 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import './exmaple.css';
-import { IssueGet } from "../../types/issues";
-import { usePatchData } from "../../utils/api/hooks/usePatchData";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { IssueGet } from "../../types/issues";
+import { usePatchData } from "../../utils/api/hooks/usePatchData";
+import "./example2.css";
+import IssueCard from "./IssueCard";
 
 interface Props {
     issues: IssueGet[] | undefined;
@@ -11,89 +12,95 @@ interface Props {
 }
 
 export const Example = ({ issues, setChangedData }: Props) => {
-    const [todoItems, setTodoItems] = useState<IssueGet[]>(issues ? issues.filter((issue) => issue.statusId === 1) : []);
-    const [doneItems, setDoneItems] = useState<IssueGet[]>(issues ? issues.filter((issue) => issue.statusId === 2) : []);
-
+    const [columns, setColumns] = useState({
+        todo: issues?.filter((issue) => issue.statusId === 1) || [],
+        inProgress: issues?.filter((issue) => issue.statusId === 2) || [],
+        done: issues?.filter((issue) => issue.statusId === 3) || [],
+    });
 
     const queryClient = useQueryClient();
-
     const { mutate } = usePatchData();
 
-    const [todoList, todos] = useDragAndDrop<HTMLUListElement, IssueGet>(
-        todoItems,
-        {
-            group: "todoList",
-            onDragend: (result) => {
-                const { draggedNode } = result;
-                const Item: IssueGet = draggedNode.data.value as IssueGet;
-                console.log(Item.serial);
-                mutate({
-                    url: 'issues',
-                    id: Item.id,
-                    data: {
-                        statusId: 2
-                    }
-                }, {
-                    onSuccess: () => {
-                        console.log('Success');
-                        setChangedData('change to todo');
-                        window.location.reload();
-                        queryClient.invalidateQueries({ queryKey: ['issues'] });
-                    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleDragEnd = (result: any, newStatusId: number, columnKey: keyof typeof columns) => {
+        const { draggedNode } = result;
+        const Item: IssueGet = draggedNode.data.value as IssueGet;
 
-                })
+        console.log(`Moved ${Item.serial} to ${columnKey}`);
+
+        mutate(
+            {
+                url: "issues",
+                id: Item.id,
+                data: { statusId: newStatusId },
+            },
+            {
+                onSuccess: () => {
+                    console.log(`Success: Moved ${Item.serial} to ${columnKey}`);
+                    setChangedData(`change to ${columnKey}`);
+                    queryClient.invalidateQueries({ queryKey: ["issues"] });
+                },
             }
-        },
-    );
+        );
+    };
 
-    const [doneList, dones] = useDragAndDrop<HTMLUListElement, IssueGet>(
-        doneItems,
-        {
-            group: "todoList",
-            onDragend: (result) => {
-                const { draggedNode } = result;
-                const Item: IssueGet = draggedNode.data.value as IssueGet;
-                console.log(Item.serial);
-                mutate({
-                    url: 'issues',
-                    id: Item.id,
-                    data: {
-                        statusId: 1
-                    }
-                }, {
-                    onSuccess: () => {
-                        console.log('Success');
-                        setChangedData('change to done');
-                        window.location.reload();
-                        queryClient.invalidateQueries({ queryKey: ['issues'] });
-                    }
+    const [todoList, todos] = useDragAndDrop<HTMLUListElement, IssueGet>(columns.todo, {
+        group: "kanban",
+        onDragend: (result) => handleDragEnd(result, 2, "inProgress"),
+    });
 
-                })
-            }
-        }
-    );
+    const [inProgressList, inProgress] = useDragAndDrop<HTMLUListElement, IssueGet>(columns.inProgress, {
+        group: "kanban",
+        onDragend: (result) => handleDragEnd(result, 3, "done"),
+    });
+
+    const [doneList, dones] = useDragAndDrop<HTMLUListElement, IssueGet>(columns.done, {
+        group: "kanban",
+        onDragend: (result) => handleDragEnd(result, 1, "todo"),
+    });
 
     useEffect(() => {
-        setTodoItems(issues ? issues.filter((issue) => issue.statusId === 1) : []);
-        setDoneItems(issues ? issues.filter((issue) => issue.statusId === 2) : []);
-    }, [issues, todoList, doneList]);
+        setColumns({
+            todo: issues?.filter((issue) => issue.statusId === 1) || [],
+            inProgress: issues?.filter((issue) => issue.statusId === 2) || [],
+            done: issues?.filter((issue) => issue.statusId === 3) || [],
+        });
+    }, [issues, todos, inProgress, dones]);
 
     return (
-        <div className="kanban-board" >
-            <ul ref={todoList}>
-                {todos.map((todo) => (
-                    <li className="kanban-item" key={todo.id}>
-                        {todo.serial}-{todo.statusId}
-                    </li>
-                ))}
-            </ul>
-            <ul ref={doneList}>
-                {dones.map((done) => (
-                    <li className="kanban-item" key={done.id}>
-                        {done.serial}-{done.statusId}
-                    </li>
-                ))}
-            </ul>
-        </div >
+        <div className="kanban-board">
+            <div className="kanban-column">
+                <h3 className="columnTitle">Registro</h3>
+                <ul ref={todoList} className="kanban-list">
+                    {todos.map((todo) => (
+                        <li className="kanban-item" key={todo.id}>
+                            <IssueCard data={todo} />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className="kanban-column">
+                <h3 className="columnTitle">Resolviendo</h3>
+                <ul ref={inProgressList} className="kanban-list">
+                    {inProgress.map((progress) => (
+                        <li className="kanban-item" key={progress.id}>
+                            <IssueCard data={progress} />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className="kanban-column">
+                <h3 className="columnTitle">Resuelto</h3>
+                <ul ref={doneList} className="kanban-list">
+                    {dones.map((done) => (
+                        <li className="kanban-item" key={done.id}>
+                            <IssueCard data={done} />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     );
 };
