@@ -8,12 +8,12 @@ import NewClaimForm from "./FormNewComplaint";
 import Modal from "./Modal";
 
 export const Container = () => {
-    const { data: issues, refetch } = useGetData<IssueGet[]>('/issues', ['issues'], {
+    const { data: issues, refetch } = useGetData<IssueGet[]>('issues', ['issues'], {
         refetchOnWindowFocus: true,
         refetchOnMount: true,
     });
 
-    const { data: complaints } = useGetData<ComplaintGet[]>('/complaints', ['complaints']);
+    const { data: complaints } = useGetData<ComplaintGet[]>('complaints', ['complaints','issues']);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [changedData, setChangedData] = useState<string>('');
 
@@ -38,7 +38,7 @@ export const Container = () => {
                     </div>
                     <div className="complaintsList">
                         {complaints && complaints.map((todo) => (
-                            <ComplaintCard data={todo} />
+                            <ComplaintCard key={todo.id} data={todo} />
                         ))}
                     </div>
                 </div>

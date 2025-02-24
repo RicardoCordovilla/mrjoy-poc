@@ -1,3 +1,4 @@
+import ReactTimeAgo from "react-time-ago";
 import { IssueGet } from "../../types/issues";
 import "./issueCard.css";
 
@@ -13,7 +14,9 @@ export const IssueCard = ({ data }: ComplaintCardProps) => {
                 <span>{data.serial}</span>
                 <button className="edit-button">✏️</button>
             </div>
-            <p className="card-subtitle">{data.associatedComplaint?.clientName} - hace 2 días</p>
+            <p className="card-subtitle">{data.associatedComplaint?.clientName} -
+                <ReactTimeAgo date={data.registeredDate} locale="es-US" />
+            </p>
             <p className="card-details">
                 <strong>Detalles:</strong>
                 {data.associatedComplaint?.description}

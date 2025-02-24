@@ -74,10 +74,6 @@ const NewClaimForm: React.FC<NewClaimFormProps> = ({ onClose }) => {
                 {errors.clientName && <span>Campo obligatorio</span>}
             </div>
 
-            <div className="form-group">
-                <label>Empresa</label>
-                <input {...register("clientType")} />
-            </div>
 
             <div className="form-group">
                 <label>Email</label>
@@ -106,23 +102,6 @@ const NewClaimForm: React.FC<NewClaimFormProps> = ({ onClose }) => {
                 <label>Descripción</label>
                 <textarea {...register("description", { required: true })}></textarea>
                 {errors.description && <span>Campo obligatorio</span>}
-            </div>
-
-            <h3>EMPRESA</h3>
-
-            <div className="form-group">
-                <label>Nombre persona contacto</label>
-                <input {...register("contactPerson")} />
-            </div>
-
-            <div className="form-group">
-                <label>Teléfono</label>
-                <input type="tel" {...register("phoneNumber")} />
-            </div>
-
-            <div className="form-group">
-                <label>Email</label>
-                <input type="email" {...register("email")} />
             </div>
 
             <div className="form-group">
