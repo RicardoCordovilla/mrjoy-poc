@@ -9,9 +9,7 @@ export const IssueCard = ({ data }: ComplaintCardProps) => {
     return (
         <div className="card">
             <div className="card-header">
-                <span className=
-                    {`status-tag ${data.statusId === 1 ? "todo" : data.statusId === 2 ? "in-progress" : "done"}`}
-                ></span>
+     
                 <span>{data.serial}</span>
                 <button className="edit-button">✏️</button>
             </div>

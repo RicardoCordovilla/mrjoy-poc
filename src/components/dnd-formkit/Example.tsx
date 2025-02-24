@@ -8,7 +8,7 @@ import IssueCard from "./IssueCard";
 
 interface Props {
     issues: IssueGet[] | undefined;
-    setChangedData: (data: string) => void;
+    setChangedData?: (data: string) => void;
 }
 
 export const Example = ({ issues, setChangedData }: Props) => {
@@ -25,7 +25,7 @@ export const Example = ({ issues, setChangedData }: Props) => {
     const handleDragEnd = (result: any, newStatusId: number, columnKey: keyof typeof columns) => {
         const { draggedNode } = result;
         const Item: IssueGet = draggedNode.data.value as IssueGet;
-
+        setChangedData?.(`Moved ${Item.serial} to ${columnKey}`);
         console.log(`Moved ${Item.serial} to ${columnKey}`);
 
         mutate(
@@ -36,8 +36,15 @@ export const Example = ({ issues, setChangedData }: Props) => {
             },
             {
                 onSuccess: () => {
-                    console.log(`Success: Moved ${Item.serial} to ${columnKey}`);
-                    setChangedData(`change to ${columnKey}`);
+                    setChangedData?.(`Moved ${Item.serial} to ${columnKey}`);
+                    // Immediately update the local state
+                    setColumns(prev => ({
+                        todo: prev.todo.filter(i => i.id !== Item.id),
+                        inProgress: prev.inProgress.filter(i => i.id !== Item.id),
+                        done: prev.done.filter(i => i.id !== Item.id),
+                        [columnKey]: [...(prev[columnKey]), { ...Item, statusId: newStatusId }]
+                    }));
+                    // Then invalidate the query to sync with server
                     queryClient.invalidateQueries({ queryKey: ["issues"] });
                 },
             }
@@ -65,7 +72,7 @@ export const Example = ({ issues, setChangedData }: Props) => {
             inProgress: issues?.filter((issue) => issue.statusId === 2) || [],
             done: issues?.filter((issue) => issue.statusId === 3) || [],
         });
-    }, [issues, todos, inProgress, dones]);
+    }, [issues]);
 
     return (
         <div className="kanban-board">

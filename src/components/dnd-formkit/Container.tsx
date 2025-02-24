@@ -3,26 +3,29 @@ import { useGetData } from "../../utils/api/hooks/useGetData";
 import { IssueGet } from "../../types/issues";
 import { Example } from "./Example";
 
-const Container = () => {
+export const Container = () => {
+    const { data: issues, refetch } = useGetData<IssueGet[]>('/issues', ['issues'], {
+        refetchOnWindowFocus: true,
+        refetchOnMount: true,
+        refetchInterval: 2000, // Refetch every 2 seconds
+        staleTime: 1000,
+    });
 
-    const { data: issues, refetch } = useGetData<IssueGet[]>('/issues', ['issues'])
     const [changedData, setChangedData] = useState<string>('');
 
     useEffect(() => {
-        refetch()
-    }, [issues, changedData, refetch])
+        console.log('Data has changed:', changedData);
+        refetch();
+    }, [changedData, refetch]);
 
     return (
         <div className="App">
-            {
-                issues &&
+            {issues && (
                 <Example
                     issues={issues}
                     setChangedData={setChangedData}
                 />
-            }
+            )}
         </div>
-    )
+    );
 }
-
-export default Container

@@ -1,5 +1,5 @@
 import './App.css';
-import Container from './components/dnd-formkit/Container';
+import { Container } from './components/dnd-formkit/Container';
 
 function App() {
 
