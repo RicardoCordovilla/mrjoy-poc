@@ -1,5 +1,5 @@
 import './App.css';
-import { Container } from './components/Container';
+import { Example } from './components/dnd-formkit/Example';
 import { IssueGet } from './types/issues';
 import { useGetData } from './utils/api/hooks/useGetData';
 
@@ -9,9 +9,7 @@ function App() {
 
   return (
     <div className="App">
-      <Container
-        items={issues}
-      />
+      <Example />
     </div>
   )
 }
