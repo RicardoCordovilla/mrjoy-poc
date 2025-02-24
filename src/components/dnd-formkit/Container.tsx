@@ -13,8 +13,9 @@ export const Container = () => {
         refetchOnMount: true,
     });
 
-    const { data: complaints } = useGetData<ComplaintGet[]>('complaints', ['complaints','issues']);
+    const { data: complaints } = useGetData<ComplaintGet[]>('complaints', ['complaints', 'issues']);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    console.log(issues);
 
 
     const handleOpenModal = () => setIsModalOpen(true);

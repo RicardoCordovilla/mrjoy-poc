@@ -38,7 +38,7 @@ const NewIssueForm: React.FC<NewIssueFormProps> = ({ associatedComplaintId, onCl
 
     const onSubmit: SubmitHandler<IssueFormData> = (data) => {
         mutate({
-            registeredById: "009a262a-7131-42ee-a948-b24a14b30926",
+            registeredById: "9a5ccbba-3d40-4000-9331-e3526426c79e",
             issueTypeId: data.issueTypeId,
             associatedComplaintId: data.associatedComplaintId,
             statusId: 1,
