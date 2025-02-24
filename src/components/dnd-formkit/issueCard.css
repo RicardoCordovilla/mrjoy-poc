@@ -16,7 +16,7 @@
 .card-header-content {
   display: flex;
   flex-direction: column;
-  justify-content: baseline;
+  justify-content: flex-start;
 }
 
 .card-title {
