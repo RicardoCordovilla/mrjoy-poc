@@ -10,7 +10,9 @@ export const IssueCard = ({ data }: ComplaintCardProps) => {
     return (
         <div className="card">
             <div className="card-header">
-
+                <span className=
+                    {`status-tag ${data.priority}`}
+                ></span>
                 <span>{data.serial}</span>
                 <button className="edit-button">✏️</button>
             </div>
@@ -22,8 +24,16 @@ export const IssueCard = ({ data }: ComplaintCardProps) => {
                 {data.associatedComplaint?.description}
             </p>
             <div className="tags-container">
-                <span className="tag">Equipos</span>
-                <span className="tag">Cafetería</span>
+                <span className="tag">
+                    {
+                        data.issueType
+                    }
+                </span>
+                <span className="tag">
+                    {
+                        data.product
+                    }
+                </span>
             </div>
         </div>
     );
