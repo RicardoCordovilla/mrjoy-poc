@@ -1,20 +1,11 @@
 import './App.css';
-import { Example } from './components/dnd-formkit/Example';
-import { IssueGet } from './types/issues';
-import { useGetData } from './utils/api/hooks/useGetData';
+import Container from './components/dnd-formkit/Container';
 
 function App() {
 
-  const { data: issues } = useGetData<IssueGet[]>('/issues', ['issues'])
-
   return (
     <div className="App">
-      {
-        issues &&
-        <Example
-          issues={issues}
-        />
-      }
+      <Container />
     </div>
   )
 }

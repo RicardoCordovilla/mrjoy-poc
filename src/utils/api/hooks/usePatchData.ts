@@ -17,6 +17,9 @@ const patchData = async <T>({
   id,
   data,
 }: PatchParams<T>): Promise<PatchResponse> => {
+  console.log('url', url);
+  console.log('id', id);
+  console.log('data', data);
   const response = await api.patch<PatchResponse>(`${url}/${id}`, data);
   return response.data;
 };

@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 
 interface Props {
     issues: IssueGet[] | undefined;
+    setChangedData: (data: string) => void;
 }
 
-export const Example = ({ issues }: Props) => {
+export const Example = ({ issues, setChangedData }: Props) => {
     const [todoItems, setTodoItems] = useState<IssueGet[]>(issues ? issues.filter((issue) => issue.statusId === 1) : []);
     const [doneItems, setDoneItems] = useState<IssueGet[]>(issues ? issues.filter((issue) => issue.statusId === 2) : []);
 
@@ -23,18 +24,20 @@ export const Example = ({ issues }: Props) => {
         {
             group: "todoList",
             onDragend: (result) => {
-                const { values } = result;
-                const Item: IssueGet = values[0] as IssueGet;
-                console.log(Item.id);
+                const { draggedNode } = result;
+                const Item: IssueGet = draggedNode.data.value as IssueGet;
+                console.log(Item.serial);
                 mutate({
                     url: 'issues',
                     id: Item.id,
                     data: {
-                        statusId: 1
+                        statusId: 2
                     }
                 }, {
                     onSuccess: () => {
                         console.log('Success');
+                        setChangedData('change to todo');
+                        window.location.reload();
                         queryClient.invalidateQueries({ queryKey: ['issues'] });
                     }
 
@@ -48,18 +51,20 @@ export const Example = ({ issues }: Props) => {
         {
             group: "todoList",
             onDragend: (result) => {
-                const { values } = result;
-                const Item: IssueGet = values[0] as IssueGet;
-                console.log(Item.id);
+                const { draggedNode } = result;
+                const Item: IssueGet = draggedNode.data.value as IssueGet;
+                console.log(Item.serial);
                 mutate({
                     url: 'issues',
                     id: Item.id,
                     data: {
-                        statusId: 2
+                        statusId: 1
                     }
                 }, {
                     onSuccess: () => {
                         console.log('Success');
+                        setChangedData('change to done');
+                        window.location.reload();
                         queryClient.invalidateQueries({ queryKey: ['issues'] });
                     }
 
