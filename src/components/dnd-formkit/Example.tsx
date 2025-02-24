@@ -5,8 +5,6 @@ import { IssueGet } from "../../types/issues";
 import { usePatchData } from "../../utils/api/hooks/usePatchData";
 import "./example2.css";
 import IssueCard from "./IssueCard";
-import Modal from "./Modal";
-import EditIssueForm from "./FormEditIssue";
 
 interface Props {
     issues: IssueGet[] | undefined;
@@ -80,11 +78,6 @@ export const Example = ({ issues }: Props) => {
         }
     });
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
-
 
     useEffect(() => {
         setColumns({
@@ -128,13 +121,6 @@ export const Example = ({ issues }: Props) => {
                     ))}
                 </ul>
             </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <EditIssueForm
-                    // issue={data}
-                    onClose={handleCloseModal}
-                    onOpen={handleOpenModal}
-                />
-            </Modal>
         </div>
     );
 };
