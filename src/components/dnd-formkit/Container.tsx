@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ComplaintGet } from "../../types/complaint";
 import { IssueGet } from "../../types/issues";
 import { useGetData } from "../../utils/api/hooks/useGetData";
@@ -8,19 +8,14 @@ import NewClaimForm from "./FormNewComplaint";
 import Modal from "./Modal";
 
 export const Container = () => {
-    const { data: issues, refetch } = useGetData<IssueGet[]>('issues', ['issues'], {
+    const { data: issues } = useGetData<IssueGet[]>('issues', ['issues'], {
         refetchOnWindowFocus: true,
         refetchOnMount: true,
     });
 
     const { data: complaints } = useGetData<ComplaintGet[]>('complaints', ['complaints','issues']);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [changedData, setChangedData] = useState<string>('');
 
-    useEffect(() => {
-        console.log('Data has changed:', changedData);
-        refetch();
-    }, [changedData, refetch]);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -45,7 +40,6 @@ export const Container = () => {
                 {issues && (
                     <Example
                         issues={issues}
-                        setChangedData={setChangedData}
                     />
                 )}
             </div>
