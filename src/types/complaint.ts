@@ -14,4 +14,5 @@ export interface ComplaintGet {
     requireSolution: boolean;
     attachments: string | null;
     observations: string | null;
+    channel: string;
 }

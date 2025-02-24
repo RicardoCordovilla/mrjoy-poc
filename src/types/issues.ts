@@ -24,4 +24,6 @@ export interface AssociatedComplaint {
     serialNumber: number;
     description: string;
     eventDate: Date;
+    channel: string;
+    requireSolution: boolean;
 }
