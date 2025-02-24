@@ -5,12 +5,6 @@ import ReactTimeAgo from 'react-time-ago'
 
 
 const ComplaintCard: React.FC<{ data: ComplaintGet }> = ({ data }) => {
-    const formattedDate = new Date(data.eventDate).toLocaleDateString("es-ES", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
 
     return (
         <div className="complaint-card">
