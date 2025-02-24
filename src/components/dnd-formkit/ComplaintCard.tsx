@@ -1,7 +1,7 @@
 import React from "react";
 import "./complaintCard.css";
 import { ComplaintGet } from "../../types/complaint";
-
+import ReactTimeAgo from 'react-time-ago'
 
 
 const ComplaintCard: React.FC<{ data: ComplaintGet }> = ({ data }) => {
@@ -21,7 +21,9 @@ const ComplaintCard: React.FC<{ data: ComplaintGet }> = ({ data }) => {
                     <button className="menu-btn">☰</button>
                 </div>
             </div>
-            <p className="complaint-subtitle">{data.clientName} - {formattedDate}</p>
+            <p className="complaint-subtitle">{data.clientName} -
+                <ReactTimeAgo date={data.eventDate} locale="es-US" />
+            </p>
             <p className="complaint-description">
                 <strong>Descripción:</strong> {data.description}
             </p>
