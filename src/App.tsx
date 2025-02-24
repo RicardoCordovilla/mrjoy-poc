@@ -9,7 +9,12 @@ function App() {
 
   return (
     <div className="App">
-      <Example />
+      {
+        issues &&
+        <Example
+          issues={issues}
+        />
+      }
     </div>
   )
 }
