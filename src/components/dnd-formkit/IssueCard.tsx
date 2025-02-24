@@ -55,6 +55,10 @@ export const IssueCard = ({ data }: ComplaintCardProps) => {
                         data.associatedComplaint?.channel.toUpperCase()
                     }
                 </span>
+
+                <span>
+                    {data.registeredBy}
+                </span>
             </div>
 
         </div>
